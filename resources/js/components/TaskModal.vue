@@ -49,7 +49,7 @@
 
                 <footer class="modal-card-foot">
                     <button class="button is-primary">Save</button>
-                    <button class="button" type="button" @click="cancel">Cancel</button>
+                    <button class="button" type="button" @click="reset">Cancel</button>
                 </footer>
             </div>
         </form>
@@ -74,19 +74,25 @@
         },
 
         methods: {
+            /**
+             * Display the modal
+             * @param {Task} task           The Task to display
+             * @param {function} callback   A callback to execute after the task is saved
+             */
             showModal(task, callback) {
                 this.active = true;
                 this.task = task;
                 this.callback = callback;
             },
 
+            /**
+             * @param e
+             */
             handleSubmit(e) {
                 e.preventDefault();
 
                 // show loading indicator
                 this.loading = true;
-
-                console.log(this.task);
 
                 // make API call
                 axios.post('/api/tasks', this.task)
@@ -94,21 +100,36 @@
                     .catch(this.handleSubmitError);
             },
 
+            /**
+             * @param response
+             */
             handleSubmitResponse(response) {
-                console.log(response);
+                this.callback(new Task(
+                    response.data.id,
+                    response.data.title,
+                    response.data.description,
+                    response.data.priority,
+                    response.data.status,
+                    response.data.due_at,
+                    response.data.created_at,
+                    response.data.updated_at
+                ));
 
-                this.active = false;
-                this.callback(this.task);
-                this.task = new Task();
-                this.loading = false;
+                this.reset();
             },
 
+            /**
+             * @param response
+             */
             handleSubmitError(response) {
                 console.log('error', response);
                 this.loading = false;
             },
 
-            cancel() {
+            /**
+             * Reset fields and hide the modal
+             */
+            reset() {
                 this.active = false;
                 this.task = new Task();
                 this.callback = null;

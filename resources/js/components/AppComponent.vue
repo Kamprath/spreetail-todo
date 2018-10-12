@@ -60,6 +60,9 @@
         },
 
         methods: {
+            /**
+             * Handle click event on Add Task button
+             */
             handleAddTaskClick() {
                 const task = new Task();
 
@@ -67,24 +70,45 @@
                 EventBus.$emit('show-modal', task, this.updateTask);
             },
 
+            /**
+             * Handle click event on burger icon
+             */
             handleBurgerClick() {
                 this.isMenuActive = !this.isMenuActive;
             },
 
-            updateTask(task) {
-                console.log('updateTask()', task);
-                // iterate through tasks
+            /**
+             * Update or add a new Task
+             * @param {Task} updatedTask
+             */
+            updateTask(updatedTask) {
+                let index = -1;
 
-                // if id matches task, replace object in array and return
+                this.tasks.find((task, i) => {
+                    if (task.id !== updatedTask.id) {
+                        return false;
+                    }
 
-                // otherwise add task to array
+                    index = i;
+                    return true;
+                });
+
+                if (index >= 0) {
+                    this.tasks.splice(index, 1, updatedTask);
+                } else {
+                    this.tasks.push(updatedTask);
+                }
             },
 
+            /**
+             * @param {int} priority
+             * @returns {Array}
+             */
             getTasksByPriority(priority) {
                 const results = [];
 
                 this.tasks.forEach(task => {
-                    // return if task is not the selected priority
+                    // return if task is not the selected priority or status
                     if (task.priority !== priority || task.status !== this.selectedStatus) {
                         return;
                     }
