@@ -10,11 +10,19 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function create(Request $request): JsonResponse
+    public function createOrUpdate(Request $request, $id = 0): JsonResponse
     {
+        $task = $id
+            ? Task::find($id)
+            : new Task();
+
+        // return error if task is not found
+        if ($id && !$task) {
+            return response()->json(['message' => 'Task not found'], 404);
+        }
+
         $due_at = $request->get('due_at');
 
-        $task = new Task();
         $task->title = $request->get('title');
         $task->description = $request->get('description');
         $task->priority = (int) $request->get('priority', TaskPriorities::HIGH);
@@ -23,7 +31,7 @@ class TaskController extends Controller
             ? (new \DateTime($due_at))->format('Y-m-d H:i:s')
             : null;
 
-        // validate input
+        // return error if input is invalid
         if (!$task->title) {
             return response()->json(['message' => 'Title is required'], 400);
         }
@@ -36,12 +44,7 @@ class TaskController extends Controller
         }
 
         // return created model
-        return response()->json($task->toArray(), 201);
-    }
-
-    public function update()
-    {
-
+        return response()->json($task->toArray(), $id ? 200 : 201);
     }
 
     public function delete()

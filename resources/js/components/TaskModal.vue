@@ -7,7 +7,7 @@
                     <p class="modal-card-title">
                         <input type="text"
                                class="input"
-                               placeholder="Task name"
+                               placeholder="Enter a title"
                                name="title"
                                v-model="task.title"
                                required
@@ -81,21 +81,24 @@
              */
             showModal(task, callback) {
                 this.active = true;
-                this.task = task;
+                this.task = Object.assign(new Task(), task);
                 this.callback = callback;
             },
 
             /**
+             * Handle form submission
              * @param e
              */
             handleSubmit(e) {
                 e.preventDefault();
 
-                // show loading indicator
                 this.loading = true;
 
-                // make API call
-                axios.post('/api/tasks', this.task)
+                // determine API endpoint based on whether task is being created or updated
+                const url = this.task.id ? `/api/tasks/${this.task.id}` : '/api/tasks';
+
+                // post JSON to API
+                axios.post(url, this.task)
                     .then(this.handleSubmitResponse)
                     .catch(this.handleSubmitError);
             },
@@ -132,6 +135,7 @@
             reset() {
                 this.active = false;
                 this.task = new Task();
+                this.temp = new Task();
                 this.callback = null;
                 this.loading = false;
             }

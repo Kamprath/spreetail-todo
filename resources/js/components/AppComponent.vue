@@ -140,6 +140,10 @@
             lowPriorityTasks() {
                 return this.getTasksByPriority(0);
             }
+        },
+
+        mounted() {
+            EventBus.$on('update-task', this.updateTask);
         }
     }
 </script>
