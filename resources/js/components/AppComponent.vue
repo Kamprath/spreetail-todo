@@ -19,9 +19,9 @@
 
             <div :class="navbarMenuClass">
                 <div class="navbar-start">
-                    <a class="navbar-item is-active">To Do</a>
-                    <a class="navbar-item">In Progress</a>
-                    <a class="navbar-item">Done</a>
+                    <a :class="getNavbarItemClass(0)" @click.prevent="() => { selectStatus(0) }">To Do</a>
+                    <a :class="getNavbarItemClass(1)" @click.prevent="() => { selectStatus(1) }">In Progress</a>
+                    <a :class="getNavbarItemClass(2)" @click.prevent="() => { selectStatus(2) }">Done</a>
                 </div>
             </div>
         </nav>
@@ -117,6 +117,22 @@
                 });
 
                 return results;
+            },
+
+            /**
+             * Get class for navbar item
+             * @param {int} status
+             */
+            getNavbarItemClass(status) {
+                return 'navbar-item' + (status === this.selectedStatus ? ' is-active' : '');
+            },
+
+            /**
+             * Set status to view tasks for
+             * @param {int} status
+             */
+            selectStatus(status) {
+                this.selectedStatus = status;
             }
         },
 
