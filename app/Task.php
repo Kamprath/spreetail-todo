@@ -34,11 +34,6 @@ class Task extends Model
         ];
     }
 
-    public function comments(): HasMany
-    {
-        return $this->hasMany(Comment::class, 'task_id', 'id');
-    }
-
     /**
      * Get all tasks as API data
      *
@@ -47,10 +42,20 @@ class Task extends Model
     public static function getAll(): Collection
     {
         return self::query()
-            ->with('comments')
+            ->with('subtasks')
             ->get()
             ->map(function(Task $task) {
                 return $task->toApi();
             });
+    }
+
+    /**
+     * Get all SubTasks that belong to the Task.
+     *
+     * @return HasMany
+     */
+    public function subtasks(): HasMany
+    {
+        return $this->hasMany(SubTask::class, 'task_id', 'id');
     }
 }
