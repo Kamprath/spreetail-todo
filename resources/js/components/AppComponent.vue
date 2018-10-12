@@ -19,34 +19,32 @@
 
             <div :class="navbarMenuClass">
                 <div class="navbar-start">
-                    <a class="navbar-item is-active">
-                        To Do
-                    </a>
-
-                    <a class="navbar-item">
-                        In Progress
-                    </a>
-
-                    <a class="navbar-item">
-                        Done
-                    </a>
+                    <a class="navbar-item is-active">To Do</a>
+                    <a class="navbar-item">In Progress</a>
+                    <a class="navbar-item">Done</a>
                 </div>
             </div>
         </nav>
 
         <section class="section">
-            <button class="button is-primary is-fullwidth" @click="handleAddTaskClick">Add Task</button>
+            <button class="button is-secondary is-medium is-fullwidth" @click="handleAddTaskClick">Add Task</button>
         </section>
+
+        <!-- Render tasks grouped by priority  -->
+        <tasks-section :tasks="highPriorityTasks">High Priority</tasks-section>
+        <tasks-section :tasks="mediumPriorityTasks">Medium Priority</tasks-section>
+        <tasks-section :tasks="lowPriorityTasks">Low Priority</tasks-section>
 
         <task-modal></task-modal>
     </div>
 </template>
 
 <script>
-    // import Bulma CSS framework (https://bulma.io/)
-    import 'bulma/css/bulma.css';
     import Task from '../models/Task';
     import {EventBus} from "../eventbus";
+
+    // import Bulma CSS framework (https://bulma.io/)
+    import 'bulma/css/bulma.css';
 
     export default {
         name: 'AppComponent',
@@ -56,7 +54,8 @@
         data() {
             return {
                 tasks: this.taskdata,
-                isMenuActive: false
+                isMenuActive: false,
+                selectedStatus: 0
             }
         },
 
@@ -65,15 +64,11 @@
                 const task = new Task();
 
                 // call method to show dialog, passing it a blank Task object
-                EventBus.$emit('show-modal', task, this.updateTask)
+                EventBus.$emit('show-modal', task, this.updateTask);
             },
 
             handleBurgerClick() {
                 this.isMenuActive = !this.isMenuActive;
-            },
-
-            showTaskModal(task) {
-
             },
 
             updateTask(task) {
@@ -83,6 +78,21 @@
                 // if id matches task, replace object in array and return
 
                 // otherwise add task to array
+            },
+
+            getTasksByPriority(priority) {
+                const results = [];
+
+                this.tasks.forEach(task => {
+                    // return if task is not the selected priority
+                    if (task.priority !== priority || task.status !== this.selectedStatus) {
+                        return;
+                    }
+
+                    results.push(task);
+                });
+
+                return results;
             }
         },
 
@@ -93,6 +103,18 @@
 
             navbarMenuClass() {
                 return 'navbar-menu' + (this.isMenuActive ? ' is-active' : '');
+            },
+
+            highPriorityTasks() {
+                return this.getTasksByPriority(2);
+            },
+
+            mediumPriorityTasks() {
+                return this.getTasksByPriority(1);
+            },
+
+            lowPriorityTasks() {
+                return this.getTasksByPriority(0);
             }
         }
     }

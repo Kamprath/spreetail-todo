@@ -48,7 +48,7 @@
                 </section>
 
                 <footer class="modal-card-foot">
-                    <button class="button is-success">Save</button>
+                    <button class="button is-primary">Save</button>
                     <button class="button" type="button" @click="cancel">Cancel</button>
                 </footer>
             </div>
