@@ -79,6 +79,10 @@
                 <footer class="modal-card-foot">
                     <button class="button is-primary">Save</button>
                     <button class="button" type="button" @click="reset">Cancel</button>
+                    <button class="button is-danger is-pulled-right"
+                            type="button"
+                            v-if="task.id"
+                            @click="deleteTask">Delete</button>
                 </footer>
             </div>
         </form>
@@ -184,6 +188,19 @@
                 this.temp = new Task();
                 this.callback = null;
                 this.loading = false;
+            },
+
+            /**
+             * Delete the selected task
+             */
+            deleteTask() {
+                if (!window.confirm('The task will be permanently deleted. Continue?')) return;
+
+                axios.delete(`/api/tasks/${this.task.id}`)
+                    .then(() => {
+                        EventBus.$emit('delete-task', this.task.id);
+                        this.reset();
+                    });
             }
         },
 
@@ -202,6 +219,10 @@
 <style lang="less" scoped>
     form {
         width: 100%;
+    }
+
+    footer {
+        display: block;
     }
 
     .modal-card {

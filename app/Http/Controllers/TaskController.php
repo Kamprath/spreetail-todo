@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function createOrUpdate(Request $request, $id = 0): JsonResponse
+    public function createOrUpdate(Request $request, int $id = 0): JsonResponse
     {
         $task = $id
             ? Task::find($id)
@@ -49,9 +49,18 @@ class TaskController extends Controller
         return response()->json($task->toApi(), $id ? 200 : 201);
     }
 
-    public function delete()
+    public function delete(int $id)
     {
+        $task = Task::find($id);
 
+        if (!$task) {
+            return response(null, 404);
+        }
+
+        SubTask::where('task_id', $task->id)->delete();
+        $task->delete();
+
+        return response(null, 200);
     }
 
     /**

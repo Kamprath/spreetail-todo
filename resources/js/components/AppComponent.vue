@@ -101,6 +101,22 @@
             },
 
             /**
+             * Delete a task
+             * @param {int} id
+             */
+            deleteTask(id) {
+                this.tasks.find((task, i) => {
+                    if (task.id !== id) {
+                        return false;
+                    }
+
+                    this.tasks.splice(i, 1);
+
+                    return true;
+                });
+            },
+
+            /**
              * @param {int} priority
              * @returns {Array}
              */
@@ -161,6 +177,7 @@
 
         mounted() {
             EventBus.$on('update-task', this.updateTask);
+            EventBus.$on('delete-task', this.deleteTask);
         }
     }
 </script>
