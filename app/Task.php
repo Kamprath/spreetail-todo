@@ -8,16 +8,30 @@ use Illuminate\Support\Collection;
 
 class Task extends Model
 {
-    protected $fillable = ['title', 'description', 'status', 'priority', 'due_at'];
-
     /**
      * @var bool
      */
     public $timestamps = true;
 
-    public function subtasks(): HasMany
+    /**
+     * Convert model to API-safe data
+     *
+     * @return array Returns an array of model data
+     */
+    public function toApi(): array
     {
-        return $this->hasMany(self::class, 'parent_id', 'id');
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'status' => (int) $this->status,
+            'priority' => (int) $this->priority,
+            'due_at' => $this->due_at
+                ? (new \DateTime($this->due_at))->format('Y-m-d')
+                : null,
+            'created_at' => (new \DateTime($this->created_at))->format('Y-m-d'),
+            'updated_at' => (new \DateTime($this->updated_at))->format('Y-m-d')
+        ];
     }
 
     public function comments(): HasMany
@@ -25,10 +39,18 @@ class Task extends Model
         return $this->hasMany(Comment::class, 'task_id', 'id');
     }
 
+    /**
+     * Get all tasks as API data
+     *
+     * @return Collection
+     */
     public static function getAll(): Collection
     {
         return self::query()
-            ->with(['subtasks', 'comments'])
-            ->get();
+            ->with('comments')
+            ->get()
+            ->map(function(Task $task) {
+                return $task->toApi();
+            });
     }
 }

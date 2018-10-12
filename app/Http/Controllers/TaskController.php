@@ -26,9 +26,9 @@ class TaskController extends Controller
         $task->title = $request->get('title');
         $task->description = $request->get('description');
         $task->priority = (int) $request->get('priority', TaskPriorities::HIGH);
-        $task->status = TaskStatuses::TODO;
+        $task->status = (int) $request->get('status', TaskStatuses::TODO);
         $task->due_at = $due_at
-            ? (new \DateTime($due_at))->format('Y-m-d H:i:s')
+            ? (new \DateTime($due_at))->format('Y-m-d')
             : null;
 
         // return error if input is invalid
@@ -44,7 +44,7 @@ class TaskController extends Controller
         }
 
         // return created model
-        return response()->json($task->toArray(), $id ? 200 : 201);
+        return response()->json($task->toApi(), $id ? 200 : 201);
     }
 
     public function delete()

@@ -27,6 +27,19 @@
                     </div>
 
                     <div class="field">
+                        <label class="label">Status</label>
+                        <div class="control">
+                            <div class="select is-fullwidth">
+                                <select name="status" v-model="task.status">
+                                    <option value="0">To Do</option>
+                                    <option value="1">In Progress</option>
+                                    <option value="2">Complete</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
                         <label class="label">Priority</label>
                         <div class="control">
                             <div class="select is-fullwidth">
