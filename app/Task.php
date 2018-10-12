@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
-class Task extends Model
+class Task extends Model implements ApiModelInterface
 {
     /**
      * @var bool
@@ -30,7 +30,10 @@ class Task extends Model
                 ? (new \DateTime($this->due_at))->format('Y-m-d')
                 : null,
             'created_at' => (new \DateTime($this->created_at))->format('Y-m-d'),
-            'updated_at' => (new \DateTime($this->updated_at))->format('Y-m-d')
+            'updated_at' => (new \DateTime($this->updated_at))->format('Y-m-d'),
+            'subtasks' => collect($this->subtasks)->map(function (SubTask $subtask) {
+                return $subtask->toApi();
+            })
         ];
     }
 

@@ -8,8 +8,9 @@ export default class {
      * @param {string} due_at
      * @param {string} created_at
      * @param {string} updated_at
+     * @param {array} subtasks
      */
-    constructor(id, title, description, priority, status, due_at, created_at, updated_at) {
+    constructor(id, title, description, priority, status, due_at, created_at, updated_at, subtasks) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -18,5 +19,6 @@ export default class {
         this.due_at = due_at;
         this.created_at = created_at;
         this.updated_at = updated_at;
+        this.subtasks = subtasks || [];
     }
 }

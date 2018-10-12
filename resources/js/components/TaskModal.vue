@@ -58,6 +58,13 @@
                             <input class="input" type="date" name="due_at" v-model="task.due_at">
                         </div>
                     </div>
+
+                    <div class="field">
+                        <label class="label">Subtasks</label>
+                        <div class="control">
+                            <sub-task v-for="subtask in task.subtasks" :subtask="subtask" :key="subtask.id"></sub-task>
+                        </div>
+                    </div>
                 </section>
 
                 <footer class="modal-card-foot">
