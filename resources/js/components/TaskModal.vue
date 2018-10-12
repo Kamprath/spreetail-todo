@@ -62,7 +62,16 @@
                     <div class="field">
                         <label class="label">Subtasks</label>
                         <div class="control">
-                            <sub-task v-for="subtask in task.subtasks" :subtask="subtask" :key="subtask.id"></sub-task>
+                            <sub-task v-for="subtask in task.subtasks"
+                                      :subtask="subtask"
+                                      :key="subtask.id">
+                                {{ subtask.text }}
+                            </sub-task>
+                            <input type="text"
+                                   class="input"
+                                   placeholder="Enter a new subtask. Press enter to submit."
+                                   v-model="subtaskText"
+                                   @keydown.enter="handleAddSubtask">
                         </div>
                     </div>
                 </section>
@@ -80,6 +89,7 @@
     import {EventBus} from '../eventbus';
     import Task from "../models/Task";
     import axios from 'axios';
+    import SubTask from "../models/SubTask";
 
     export default {
         name: "TaskModal",
@@ -89,7 +99,8 @@
                 active: false,
                 loading: false,
                 task: new Task(),
-                callback: null
+                callback: null,
+                subtaskText: null
             }
         },
 
@@ -135,7 +146,8 @@
                     response.data.status,
                     response.data.due_at,
                     response.data.created_at,
-                    response.data.updated_at
+                    response.data.updated_at,
+                    response.data.subtasks
                 ));
 
                 this.reset();
@@ -147,6 +159,20 @@
             handleSubmitError(response) {
                 console.log('error', response);
                 this.loading = false;
+            },
+
+            /**
+             * Add a new subtask
+             * @param {Event} e
+             */
+            handleAddSubtask(e) {
+                e.preventDefault();
+
+                this.task.subtasks.push(
+                    new SubTask(null, this.task.id, this.subtaskText, false)
+                );
+
+                this.subtaskText = null;
             },
 
             /**

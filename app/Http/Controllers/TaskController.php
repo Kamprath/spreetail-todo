@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\SubTask;
 use App\Task;
 use App\TaskPriorities;
 use App\TaskStatuses;
@@ -39,6 +40,7 @@ class TaskController extends Controller
         // attempt to create model
         try {
             $task->save();
+            $this->createSubtasks($request->get('subtasks'), $task->id);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -50,5 +52,27 @@ class TaskController extends Controller
     public function delete()
     {
 
+    }
+
+    /**
+     * Create subtasks.
+     *
+     * @param array $subtaskData
+     * @param int $task_id
+     */
+    private function createSubtasks(array $subtaskData, int $task_id)
+    {
+        foreach ($subtaskData as $data) {
+            $subtask = $data['id']
+                ? SubTask::findOrFail($data['id'])
+                : new SubTask();
+
+            $subtask->id = $data['id'];
+            $subtask->task_id = $task_id;
+            $subtask->text = $data['text'];
+            $subtask->is_complete = $data['is_complete'];
+
+            $subtask->save();
+        }
     }
 }
