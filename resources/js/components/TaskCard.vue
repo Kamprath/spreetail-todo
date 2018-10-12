@@ -37,15 +37,12 @@
         padding: 1em;
         margin-bottom: .3em;
         display: block;
-        margin-top: 0;
-        transition: box-shadow 120ms linear, margin-top 100ms linear;
+        transition: box-shadow 120ms linear;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0);
 
-        // create a raised effect on hover
         &:hover {
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-            margin-top: -2px;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
         }
     }
     .title {
