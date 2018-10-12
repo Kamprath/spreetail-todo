@@ -2,9 +2,9 @@
     <div>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-                <a class="navbar-item" href="https://bulma.io">
+                <span class="navbar-item">
                     <img src="/svg/spreetail_logo.svg">
-                </a>
+                </span>
                 <a role="button"
                    aria-label="menu"
                    aria-expanded="false"
@@ -133,6 +133,7 @@
              */
             selectStatus(status) {
                 this.selectedStatus = status;
+                this.isMenuActive = false;
             }
         },
 
