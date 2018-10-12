@@ -28,6 +28,7 @@ class TaskController extends Controller
         $task->description = $request->get('description');
         $task->priority = (int) $request->get('priority', TaskPriorities::HIGH);
         $task->status = (int) $request->get('status', TaskStatuses::TODO);
+        $task->color_class = $request->get('color_class');
         $task->due_at = $due_at
             ? (new \DateTime($due_at))->format('Y-m-d')
             : null;

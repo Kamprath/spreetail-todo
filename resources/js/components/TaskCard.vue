@@ -1,5 +1,5 @@
 <template>
-    <div class="tile notification is-primary" @click="handleClick">
+    <div :class="classString" @click="handleClick">
         <p class="title">{{ task.title }}</p>
         <p class="subtitle" v-if="task.description">{{ task.description }}</p>
     </div>
@@ -28,7 +28,13 @@
             updateTask(task) {
                 EventBus.$emit('update-task', task);
             }
-        }
+        },
+
+        computed: {
+            classString() {
+                return `tile notification ${this.task.color_class}`;
+            }
+        },
     }
 </script>
 

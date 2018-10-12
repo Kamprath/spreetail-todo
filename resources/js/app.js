@@ -19,6 +19,7 @@ Vue.component('task-modal', require('./components/TaskModal'));
 Vue.component('tasks-section', require('./components/TasksSection'));
 Vue.component('task-card', require('./components/TaskCard'));
 Vue.component('sub-task', require('./components/SubTask'));
+Vue.component('color-tag', require('./components/ColorTag'));
 
 const app = new Vue({
     el: '#app'

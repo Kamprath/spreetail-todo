@@ -74,6 +74,18 @@
                                    @keydown.enter="handleAddSubtask">
                         </div>
                     </div>
+
+                    <div class="field">
+                        <label class="label">Color</label>
+                        <div class="control">
+                            <color-tag :task="task" :color_class="'is-dark'">Gray</color-tag>
+                            <color-tag :task="task" :color_class="'is-primary'">Turquoise</color-tag>
+                            <color-tag :task="task" :color_class="'is-info'">Blue</color-tag>
+                            <color-tag :task="task" :color_class="'is-success'">Green</color-tag>
+                            <color-tag :task="task" :color_class="'is-warning'">Yellow</color-tag>
+                            <color-tag :task="task" :color_class="'is-danger'">Red</color-tag>
+                        </div>
+                    </div>
                 </section>
 
                 <footer class="modal-card-foot">
@@ -151,7 +163,8 @@
                     response.data.due_at,
                     response.data.created_at,
                     response.data.updated_at,
-                    response.data.subtasks
+                    response.data.subtasks,
+                    response.data.color_class
                 ));
 
                 this.reset();

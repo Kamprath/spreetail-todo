@@ -33,7 +33,8 @@ class Task extends Model implements ApiModelInterface
             'updated_at' => (new \DateTime($this->updated_at))->format('Y-m-d'),
             'subtasks' => collect($this->subtasks)->map(function (SubTask $subtask) {
                 return $subtask->toApi();
-            })
+            }),
+            'color_class' => $this->color_class
         ];
     }
 

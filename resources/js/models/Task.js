@@ -9,8 +9,9 @@ export default class {
      * @param {string} created_at
      * @param {string} updated_at
      * @param {array} subtasks
+     * @param {string} color_class
      */
-    constructor(id, title, description, priority, status, due_at, created_at, updated_at, subtasks) {
+    constructor(id, title, description, priority, status, due_at, created_at, updated_at, subtasks, color_class) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -20,5 +21,6 @@ export default class {
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.subtasks = subtasks || [];
+        this.color_class = color_class || 'is-primary';
     }
 }
